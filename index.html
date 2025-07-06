@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep8 Thinking</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'serif': ['Playfair Display', 'serif'],
+                        'body': ['Lora', 'serif'],
+                    },
+                    colors: {
+                        'brand-blue': '#0A2463',
+                        'brand-teal': '#3E92CC',
+                        'brand-orange': '#FF8811',
+                        'brand-light': '#F8F9FA',
+                        'brand-gray': '#6C757D',
+                        'brand-dark-gray': '#495057',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg: #F8F9FA;
+            --sidebar-bg: #ffffff;
+            --primary: #3E92CC; /* Teal */
+            --secondary: #FF8811; /* Orange */
+            --text-primary": #0A2463; /* Dark Royal Blue */
+            --text-secondary": #495057;
+            --border": #dee2e6;
+        }
+        body { background-color: var(--bg); color: var(--text-secondary); font-family: 'body'; }
+        
+        h1, h2, h3, h4, .font-heading { font-family: 'Playfair Display', serif; color: var(--text-primary); }
+        
+        .nav-link.active { background-color: var(--primary); color: white !important; font-weight: 600; }
+        .nav-link:not(.active):hover { background-color: #e9ecef; }
+        .nav-header { color: var(--text-secondary); font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.5rem 1rem; margin-top: 1rem; }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.5s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #e9ecef; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { height: 18px; width: 18px; border-radius: 50%; background: var(--primary); cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="md:hidden bg-white/80 backdrop-blur-sm sticky top-0 z-40 border-b border-border flex items-center px-4 py-2">
+        <button id="mobile-menu-button" class="p-2" aria-label="Open menu">
+            <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-serif text-center flex-grow text-brand-blue">Deep<span class="text-brand-orange">8</span> Thinking</h1>
+    </header>
+
+    <div class="flex">
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white border-r border-border p-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 flex flex-col">
+            <div class="text-center py-4 border-b border-border">
+                 <h1 class="text-3xl font-serif text-brand-blue">Deep<span class="text-brand-orange">8</span> Thinking</h1>
+            </div>
+            <nav id="main-nav" class="mt-4 flex-grow overflow-y-auto font-sans">
+                <ul class="space-y-1">
+                    <li><a href="#home" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-home w-5 text-center text-brand-teal"></i>Home</a></li>
+                    <li class="nav-header">The Basics</li>
+                    <li><a href="#formats" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-sitemap w-5 text-center text-sky-500"></i>Debate Formats</a></li>
+                    <li><a href="#motion-types" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-question-circle w-5 text-center text-purple-500"></i>Motion Types</a></li>
+                    <li><a href="#speaker-roles" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-microphone-alt w-5 text-center text-rose-500"></i>Speaker Roles</a></li>
+                    <li><a href="#wsdc-scoring" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-check-double w-5 text-center text-emerald-500"></i>WSDC Scoring</a></li>
+                    <li class="nav-header">Core Concepts</li>
+                    <li><a href="#cpr" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-magnifying-glass w-5 text-center text-red-500"></i>CPR</a></li>
+                    <li><a href="#peel" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-layer-group w-5 text-center text-indigo-500"></i>PEEL</a></li>
+                    <li><a href="#stakeholders" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-users w-5 text-center text-lime-600"></i>Stakeholders</a></li>
+                    <li class="nav-header">Frameworks</li>
+                    <li><a href="#nile" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-compass-drafting w-5 text-center text-violet-500"></i>NILE Framework</a></li>
+                    <li><a href="#mice" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-brain w-5 text-center text-amber-500"></i>MICE Incentives</a></li>
+                    <li class="nav-header">Engagement</li>
+                    <li><a href="#rebuttal" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-shield-halved w-5 text-center text-red-600"></i>Rebuttal</a></li>
+                    <li><a href="#pois" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-hand-pointer w-5 text-center text-orange-500"></i>POIs</a></li>
+                    <li><a href="#clashes" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-bolt w-5 text-center text-fuchsia-500"></i>Clashes</a></li>
+                    <li><a href="#logical-fallacies" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-theater-masks w-5 text-center text-yellow-500"></i>Logical Fallacies</a></li>
+                    <li class="nav-header">Tools</li>
+                    <li><a href="#manner-lab" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-flask-vial w-5 text-center text-cyan-500"></i>Manner Lab</a></li>
+                    <li><a href="#motion-generator" class="nav-link flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium"><i class="fas fa-lightbulb w-5 text-center text-amber-500"></i>Motion Generator</a></li>
+                </ul>
+            </nav>
+            <footer class="p-4 text-center text-xs text-brand-dark-gray">
+                &copy; 2025 Deep8 Creations<br>All rights reserved.
+            </footer>
+        </aside>
+
+        <main class="flex-1 md:ml-64 p-6 md:p-10">
+            
+            <section id="home" class="page-section">
+                <div class="mb-12 flex justify-center">
+                    <h1 class="text-5xl md:text-6xl font-black tracking-tighter text-brand-blue">
+                        <div><span class="text-brand-orange">D</span>econstruct.</div>
+                        <div><span class="text-brand-orange">E</span>lucidate.</div>
+                        <div><span class="text-brand-orange">E</span>ngage.</div>
+                        <div><span class="text-brand-orange">P</span>ersuade.</div>
+                    </h1>
+                </div>
+                <div class="space-y-12">
+                     <div>
+                        <h2 class="text-3xl md:text-4xl text-center mb-6"><span class="text-brand-orange font-bold">8</span> reasons for you to debate</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center mt-6">
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-hand-fist text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Build Confidence</h3><p class="text-sm">Articulating ideas under pressure builds resilience and self-assurance in any public setting.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-lightbulb text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Critical Thinking</h3><p class="text-sm">Debate teaches you to deconstruct complex issues, identify logical flaws, and build sound arguments.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-users text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Teamwork Skills</h3><p class="text-sm">Success requires intense collaboration, strategic coordination, and trusting your partner's strengths.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-bullhorn text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Persuasive Speaking</h3><p class="text-sm">Learn to structure a compelling narrative that can change minds and influence decisions.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-book-open text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Research Skills</h3><p class="text-sm">You'll learn to quickly find, analyze, and synthesize information from various sources to support your case.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-brain text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Empathy</h3><p class="text-sm">Arguing for positions you don't personally hold builds an understanding of different perspectives.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-shuffle text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">Adaptability</h3><p class="text-sm">Thinking on your feet and responding to unexpected arguments is a core skill for life and work.</p></div>
+                            <div class="bg-white p-6 rounded-lg border border-border shadow-sm"><i class="fas fa-graduation-cap text-brand-teal text-3xl mb-3"></i><h3 class="text-xl mb-2">General Knowledge</h3><p class="text-sm">Debating a wide range of topics will make you more informed about the world around you.</p></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl text-center mb-6 text-brand-teal">Who is this for?</h2>
+                        <div class="bg-white p-8 rounded-lg border border-border shadow-sm text-center">
+                            <p class="text-lg mb-6">This site is for anyone interested in debate who doesn't know where to start and isn't ready to commit to expensive coaching. We provide the essential tools and knowledge to get you started on your journey.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-gray-50 border p-4 rounded-lg"><h3 class="text-xl mb-2">Beginners</h3><p class="text-sm">Learn the fundamental building blocks of argumentation and case construction.</p></div>
+                                <div class="bg-gray-50 border p-4 rounded-lg"><h3 class="text-xl mb-2">Intermediate</h3><p class="text-sm">Deepen your analysis with advanced frameworks and strategic thinking.</p></div>
+                                <div class="bg-gray-50 border p-4 rounded-lg"><h3 class="text-xl mb-2">Advanced</h3><p class="text-sm">Refine your manner, master complex case setups, and perfect your weighing.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <h2 class="text-3xl text-center mb-6 text-brand-orange">Our Mission</h2>
+                        <div class="bg-white p-8 rounded-lg border border-border shadow-sm text-center">
+                            <p class="text-lg">Deep8 Thinking is a platform designed to give everyone the foundational skills to become critical thinkers and strong public speakers. In an age where complex thought can be outsourced to AI, the ability to analyze with empathy and persuade an audience is more important than ever. We believe these core human skills should be accessible to all.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="motion-types" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-question-circle text-purple-500 mr-3"></i>Understanding Motion Types</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-10">
+                    <div>
+                        <h3 class="text-2xl mb-2 text-brand-teal">What is a Motion?</h3>
+                        <p>A motion is the topic of the debate. It's a statement that one side (the Proposition or Government) must support, and the other side (the Opposition) must oppose. Understanding the specific wording of a motion is the most critical skill in debate, as it dictates what each team has to prove to win. Motions are typically categorized by their phrasing, which sets different burdens on the debaters.</p>
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">THW: "This House Would..."</h4>
+                            <p class="mt-1">These are <strong>policy motions</strong>. They propose a specific action or plan. The Proposition team has the burden to present a "model"—a clear, practical plan explaining how they would implement the motion. The Opposition can either argue against the policy in principle, argue that the practical outcomes will be negative, or propose a counter-model (a different plan to solve the same problem).</p>
+                            <div class="mt-3 bg-gray-50 p-4 rounded-lg border text-sm"><strong>Example:</strong> "THW ban unpaid internships."<br><strong>Proposition's Job:</strong> Propose a law to ban them, explain who would enforce it, and argue why this leads to a better, fairer world.<br><strong>Opposition's Job:</strong> Argue why this ban is a bad idea (e.g., it reduces opportunities for students) or propose a better alternative (e.g., regulating internships instead of banning them).</div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">THBT: "This House Believes That..."</h4>
+                            <p class="mt-1">These are <strong>value judgment motions</strong>. They ask teams to argue whether a statement is true or false, right or wrong. No model is required. The debate is a philosophical clash over competing values or a factual analysis of the world as it is. The Proposition must prove the statement is, on balance, true, while the Opposition must prove it is, on balance, false.</p>
+                             <div class="mt-3 bg-gray-50 p-4 rounded-lg border text-sm"><strong>Example:</strong> "THBT social media has done more harm than good."<br><strong>Proposition's Job:</strong> Prove that the negative impacts of social media (e.g., on mental health, democracy) outweigh the positive impacts (e.g., connectivity).<br><strong>Opposition's Job:</strong> Prove that the benefits outweigh the harms.</div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">THR: "This House Regrets..."</h4>
+                            <p class="mt-1">These are <strong>retrospective motions</strong>. They invite teams to evaluate a past event, trend, or decision. The Proposition must argue why the world would be better today if that thing had never happened (the "counterfactual"). The Opposition must defend the status quo, arguing that the world is better with the thing having happened. The debate is a comparison between the world as it is and a hypothetical alternative reality.</p>
+                             <div class="mt-3 bg-gray-50 p-4 rounded-lg border text-sm"><strong>Example:</strong> "THR the invention of the smartphone."<br><strong>Proposition's Job:</strong> Paint a picture of a world without smartphones and argue that this world would be preferable (e.g., better mental health, more genuine social interaction).<br><strong>Opposition's Job:</strong> Argue that the benefits of smartphones (e.g., access to information, safety) make our current world better than the counterfactual.</div>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">TH, as X...: "This House, as X..."</h4>
+                            <p class="mt-1">These are <strong>actor motions</strong>. They force the Proposition team to argue from the perspective of a specific person, group, or institution (e.g., "the feminist movement," "a developing nation"). All arguments must be consistent with the likely interests, values, and capabilities of that actor. The Opposition argues against the motion, but does not have to adopt a specific persona. These motions test a debater's ability to analyze stakeholder incentives deeply.</p>
+                             <div class="mt-3 bg-gray-50 p-4 rounded-lg border text-sm"><strong>Example:</strong> "TH, as the environmentalist movement, would support nuclear energy."<br><strong>Proposition's Job:</strong> Argue that, from the perspective of someone whose primary goal is to stop climate change, supporting nuclear energy is the most logical and effective strategy.<br><strong>Opposition's Job:</strong> Argue that the environmentalist movement should not support nuclear energy (e.g., due to risks of waste, meltdown, or better alternatives).</div>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">THS / THC: "This House Supports / Condemns..."</h4>
+                            <p class="mt-1">These are similar to THBT motions as they are <strong>value-based</strong>. "Supports" motions require the Proposition to align themselves with a particular movement, ideology, or action and defend it. "Condemns" motions require the Proposition to stand against something. These are debates about principles and whether it is morally or strategically right to offer support or condemnation.</p>
+                             <div class="mt-3 bg-gray-50 p-4 rounded-lg border text-sm"><strong>Example:</strong> "THS the use of civil disobedience to achieve political change."<br><strong>Proposition's Job:</strong> Argue that civil disobedience is a legitimate and effective tool for progress.<br><strong>Opposition's Job:</strong> Argue that civil disobedience is illegitimate, counter-productive, or that there are better ways to achieve change.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="wsdc-scoring" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-check-double text-emerald-500 mr-3"></i>WSDC Scoring Rubric</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-10">
+                    <div>
+                        <h3 class="text-2xl mb-2 text-brand-teal">The Three Categories of Scoring</h3>
+                        <p>In the World Schools Debating Championships (WSDC) format, judges assess speakers on three distinct categories for substantive speeches (the first three speakers on each team). The Reply Speech is scored holistically. Understanding these categories is key to improving as a debater, as it shows you exactly what judges are looking for.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-gray-50 p-6 rounded-lg border">
+                            <h4 class="text-2xl text-brand-orange">Content</h4>
+                            <p class="text-4xl font-black font-sans my-2">40</p>
+                            <p class="text-sm">The arguments themselves. This includes the logic of your points, the evidence you provide, and the relevance of your material to the motion.</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg border">
+                            <h4 class="text-2xl text-brand-teal">Style</h4>
+                            <p class="text-4xl font-black font-sans my-2">40</p>
+                            <p class="text-sm">How you speak. This covers your use of language, vocal tone and pace, eye contact, gestures, and overall persuasive delivery.</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg border">
+                            <h4 class="text-2xl text-brand-orange">Strategy</h4>
+                            <p class="text-4xl font-black font-sans my-2">20</p>
+                            <p class="text-sm">The structure and choices you make. This includes the organization of your speech, time management, and your engagement with the debate's key issues.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4 text-brand-teal">Detailed Scoring Rubric</h3>
+                        <div class="w-full">
+                            <div class="hidden md:grid md:grid-cols-4 bg-gray-200 font-sans uppercase text-sm">
+                                <div class="p-3 font-bold">Score Range</div>
+                                <div class="p-3 font-bold">Content (40)</div>
+                                <div class="p-3 font-bold">Style (40)</div>
+                                <div class="p-3 font-bold">Strategy (20)</div>
+                            </div>
+                            <div class="flex flex-col md:grid md:grid-cols-4 md:contents text-sm">
+                                <div class="bg-white border-b border-border p-3 md:p-0 md:border-none md:contents">
+                                    <div class="p-3 font-bold text-brand-blue md:border-b md:border-border">36-40 (Content/Style)<br>18-20 (Strategy)</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Content: </span><strong>Exceptional:</strong> Arguments are consistently relevant, insightful, and central to the debate. Analysis is deep, nuanced, and powerfully persuasive.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Style: </span><strong>Masterful:</strong> Delivery is captivating, fluent, and perfectly paced. Language is precise and powerful. Speaker commands the room with confidence.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Strategy: </span><strong>Exceptional:</strong> Flawless structure and time management. Makes brilliant strategic choices that shape the debate. Responds perfectly to the flow of the round.</div>
+                                </div>
+                                <div class="bg-gray-50 border-b border-border p-3 md:p-0 md:border-none md:contents">
+                                    <div class="p-3 font-bold text-brand-blue md:border-b md:border-border">32-35 (Content/Style)<br>16-17 (Strategy)</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Content: </span><strong>Very Good:</strong> Arguments are clear, well-supported, and consistently relevant. Analysis is strong with good explanation of links and impacts.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Style: </span><strong>Very Good:</strong> Delivery is clear, engaging, and confident. Effective use of rhetorical devices. Strong connection with the audience.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Strategy: </span><strong>Very Good:</strong> Speech is very well-structured and timed. Understands the key issues and prioritizes material effectively. Strong engagement with opponents.</div>
+                                </div>
+                                <div class="bg-white border-b border-border p-3 md:p-0 md:border-none md:contents">
+                                    <div class="p-3 font-bold text-brand-blue md:border-b md:border-border">28-31 (Content/Style)<br>14-15 (Strategy)</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Content: </span><strong>Good (Average):</strong> Arguments are mostly relevant and have some explanation, but may lack depth or consistent impact. Some points may be simple assertions.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Style: </span><strong>Good (Average):</strong> Delivery is clear and audible. Generally fluent but may lack vocal variety or persuasive flair. May be overly reliant on notes.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Strategy: </span><strong>Good (Average):</strong> Speech has a clear structure and timing is adequate. Shows understanding of their role but may not fully engage with the core of the debate.</div>
+                                </div>
+                                <div class="bg-gray-50 border-b border-border p-3 md:p-0 md:border-none md:contents">
+                                    <div class="p-3 font-bold text-brand-blue md:border-b md:border-border">24-27 (Content/Style)<br>12-13 (Strategy)</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Content: </span><strong>Needs Improvement:</strong> Arguments are often irrelevant, illogical, or poorly explained. Lacks clear analysis and relies heavily on assertions.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Style: </span><strong>Needs Improvement:</strong> Delivery is unclear, hesitant, or monotonous. Language may be basic or inappropriate. Lacks engagement with the audience.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Strategy: </span><strong>Needs Improvement:</strong> Speech is disorganized and poorly timed. Role is not fulfilled. Fails to identify or respond to key arguments.</div>
+                                </div>
+                                 <div class="bg-white border-b border-border p-3 md:p-0 md:border-none md:contents">
+                                    <div class="p-3 font-bold text-brand-blue md:border-b md:border-border">&lt;24 (Content/Style)<br>&lt;12 (Strategy)</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Content: </span><strong>Serious Flaws:</strong> Content is severely lacking, irrelevant, or offensive. No coherent arguments are presented.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Style: </span><strong>Serious Flaws:</strong> Delivery is incomprehensible or deeply distracting. No attempt at persuasion.</div>
+                                    <div class="p-3 md:border-b md:border-border"><span class="font-bold md:hidden">Strategy: </span><strong>Serious Flaws:</strong> No discernible structure or strategy. Speaker seems unaware of their role or the debate itself.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl mb-2 text-brand-orange">Scoring the Reply Speech (out of 50)</h3>
+                        <p>The Reply Speech is not scored on the three separate categories. Instead, it receives a single, holistic score that is half of a substantive speech score. A good reply speech (35/50) identifies the one or two key points of clash in the debate and persuasively explains why their team won those clashes. It is a biased summary, not a rebuttal speech, and should tell a compelling story of the debate from their side's perspective.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="formats" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-sitemap text-sky-500 mr-3"></i>Debate Formats</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">Understanding Debate Formats</h3>
+                        <p>While the core principles of argumentation are universal, different debate formats have unique rules, roles, and strategies. This guide is primarily based on the <strong>World Schools Debating Championships (WSDC)</strong> format, as its 3-vs-3 structure and focus on clear, substantive debate provide a strong foundation for most other styles.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">World Schools (WSDC)</h4>
+                            <p>A 3-vs-3 format where teams (Proposition and Opposition) have three speakers each giving 8-minute speeches. It emphasizes clear argumentation, engagement through POIs, and a holistic summary of the debate's key clashes. A key feature is the 4-minute <strong>Reply Speech</strong>, given by either the first or second speaker at the end of the debate, which frames the debate from their side's perspective.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">British Parliamentary (BP)</h4>
+                            <p>A 4-team format with two teams on each side (Opening Government, Closing Government, Opening Opposition, Closing Opposition). Each team has two speakers. The challenge lies in defeating the opposing side while also distinguishing your team from your partner team on the same bench. BP requires strategic extensions and nuanced weighing.</p>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">American Parliamentary (AP)</h4>
+                            <p>A 2-vs-2 format with a Prime Minister (PM), Member of Opposition (MO), Minister of the Crown (MC), and Leader of the Opposition (LO). It features different speech times and a strong emphasis on rhetoric, framework debates, and direct refutation within a fast-paced structure.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="speaker-roles" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-microphone-alt text-rose-500 mr-3"></i>Speaker Roles (WSDC)</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">The Flow of a Debate</h3>
+                        <p>In a 3-vs-3 debate, each speaker has a specific job. Understanding your role is crucial for teamwork and winning debates. Both first speakers should provide a clear roadmap of what their team will argue. This graphic shows the order of speeches.</p>
+                         <div class="my-6 p-4 bg-gray-50 rounded-lg border">
+                            <div class="flex flex-col space-y-2">
+                                <!-- Prop 1 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-teal-500 text-white flex items-center justify-center rounded-full font-bold text-xl">1st</div>
+                                    <div class="flex-1"><strong class="text-teal-600">Proposition Speaker</strong><p class="text-sm">Sets up the debate, defines terms, presents 1-2 arguments.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Opp 1 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-orange-500 text-white flex items-center justify-center rounded-full font-bold text-xl">1st</div>
+                                    <div class="flex-1"><strong class="text-orange-600">Opposition Speaker</strong><p class="text-sm">Rebuts Prop 1, presents own case, presents 1-2 arguments.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Prop 2 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-teal-500 text-white flex items-center justify-center rounded-full font-bold text-xl">2nd</div>
+                                    <div class="flex-1"><strong class="text-teal-600">Proposition Speaker</strong><p class="text-sm">Rebuts Opp 1, rebuilds own case, presents 1-2 new arguments.</p></div>
+                                </div>
+                                 <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Opp 2 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-orange-500 text-white flex items-center justify-center rounded-full font-bold text-xl">2nd</div>
+                                    <div class="flex-1"><strong class="text-orange-600">Opposition Speaker</strong><p class="text-sm">Rebuts Prop 2, rebuilds own case, presents 1-2 new arguments.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Prop 3 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-teal-500 text-white flex items-center justify-center rounded-full font-bold text-xl">3rd</div>
+                                    <div class="flex-1"><strong class="text-teal-600">Proposition Speaker</strong><p class="text-sm">Pure rebuttal and analysis. Identifies clashes and weighs the debate.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Opp 3 -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-orange-500 text-white flex items-center justify-center rounded-full font-bold text-xl">3rd</div>
+                                    <div class="flex-1"><strong class="text-orange-600">Opposition Speaker</strong><p class="text-sm">Pure rebuttal and analysis. Identifies clashes and weighs the debate.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <!-- Reply Speeches -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-orange-500 text-white flex items-center justify-center rounded-full font-bold text-lg">Reply</div>
+                                    <div class="flex-1"><strong class="text-orange-600">Opposition Speaker</strong><p class="text-sm">Biased summary of the debate, framing the clashes to their advantage.</p></div>
+                                </div>
+                                <div class="ml-8 border-l-2 border-dashed border-gray-300 h-6"></div>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-teal-500 text-white flex items-center justify-center rounded-full font-bold text-lg">Reply</div>
+                                    <div class="flex-1"><strong class="text-teal-600">Proposition Speaker</strong><p class="text-sm">Biased summary of the debate, framing the clashes to their advantage.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">1st Proposition</h4>
+                            <p><strong>The Architect.</strong> Your job is to set up the debate. You must clearly define the motion, present your team's model (if needed), and lay out your case. You will use <a href="#cpr" class="text-brand-teal font-bold">CPR</a> to frame the debate and present 1-2 clear arguments using the <a href="#peel" class="text-brand-teal font-bold">PEEL</a> structure. Your speech should be clear, confident, and leave no doubt about what your team stands for.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">1st Opposition</h4>
+                            <p><strong>The Architect of the Opposition.</strong> Your first job is to clash directly with the 1st Prop by <a href="#rebuttal" class="text-brand-teal font-bold">rebutting</a> their case setup and arguments. Then, you must present your own constructive case, often with its own <a href="#cpr" class="text-brand-teal font-bold">CPR</a> framing, and deliver your own arguments using <a href="#peel" class="text-brand-teal font-bold">PEEL</a>. You must be both a rebuilder and a builder.</p>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">2nd Proposition & 2nd Opposition</h4>
+                            <p><strong>The Builder & The Brawler.</strong> These speakers have two jobs. First, they must defend their own case and <a href="#rebuttal" class="text-brand-teal font-bold">rebut</a> the arguments made by the previous speaker. This is crucial for staying in the debate. Second, they must introduce new arguments to extend their case and add depth. These speeches are about both defense and offense.</p>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">3rd Proposition & 3rd Opposition</h4>
+                            <p><strong>The Analyst.</strong> The third speakers do not introduce new arguments (unless explicitly flagged by their first speaker, which is rare and risky). Their entire speech is dedicated to <a href="#rebuttal" class="text-brand-teal font-bold">rebuttal</a> and analysis. Your job is to identify the main <a href="#clashes" class="text-brand-teal font-bold">Points of Clash</a> in the debate and explain why your team has won them. This requires you to listen carefully to the entire debate and synthesize the key issues.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">Reply Speeches (Opp then Prop)</h4>
+                            <p><strong>The Storyteller.</strong> This is a 4-minute speech given by the 1st or 2nd speaker. It's a biased summary of the debate from your side's perspective. You should not introduce new arguments or rebuttal. Instead, you should frame the debate around the key <a href="#clashes" class="text-brand-teal font-bold">clashes</a> and explain why, based on the arguments made, your team's vision of the world is more compelling and should win.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cpr" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-magnifying-glass text-red-500 mr-3"></i>CPR: Context, Problem, Resolution</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is CPR?</h3>
+                        <p>CPR is your first step in prep time. It's a brainstorming framework that forces you to define the debate on your terms. By establishing the Context, identifying a clear Problem, and proposing a direct Resolution, you build a coherent case with a strong narrative from the very beginning. Spend the first 2-3 minutes of prep on this.</p>
+                        <div class="mt-4 space-y-4">
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Context</h4><p>This is the "reality" of the debate. What is happening in the world right now that makes this motion relevant? You need to paint a picture for the judge. Key questions: What is the status quo? What are the key facts and trends? Why are we debating this now?</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Problem</h4><p>Within your context, what is the specific harm or injustice that needs to be fixed? Who is the primary victim? Why is their suffering significant? A clear, compelling problem gives your case a moral core and a clear purpose.</p></div>
+                            <div>
+                                <h4 class="text-xl font-bold font-sans text-brand-teal">Resolution</h4>
+                                <p>This is your team's ultimate goal or aim. For problem-based motions (like "THW..."), your resolution is how you solve the problem. For comparative motions (like "THR..." or "THBT..."), your resolution is the better world you are advocating for. This is the core idea that every argument you make should link back to in the <a href="#peel" class="text-brand-teal font-bold">PEEL</a> framework.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">Good vs. Bad CPR</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange mb-2">THW ban unpaid internships.</h4>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-check-circle mr-2 text-green-500"></i>Good Example</h5>
+                                    <p><strong>C:</strong> In a world of rising tuition and living costs, access to career-launching internships is increasingly limited to wealthy students who can afford to work for free. <strong>P:</strong> This creates a structural barrier for talented, low-income students, entrenching generational inequality and robbing industries of diverse perspectives. <strong>R:</strong> Banning unpaid internships ensures that entry-level opportunities are accessible to all, based on merit, not financial background.</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-times-circle mr-2 text-red-500"></i>Bad Example</h5>
+                                    <p><strong>C:</strong> Internships are a thing companies offer. <strong>P:</strong> It's unfair that some people don't get paid. <strong>R:</strong> We would ban them so everyone gets paid.</p>
+                                    <p class="mt-2 text-xs text-brand-gray"><em>(Why it's bad: Vague context, undefined problem, and a simplistic resolution that doesn't explain the mechanism or impact.)</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="peel" class="page-section">
+                 <h2 class="text-4xl mb-8"><i class="fa-solid fa-layer-group text-indigo-500 mr-3"></i>PEEL: Point, Explain, Example, Link</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is PEEL?</h3>
+                        <p>PEEL is the universal structure for a strong, persuasive argument. It's the atomic unit of debate. Following this structure ensures your points are clear, logical, and impactful, guiding the judge through your reasoning step-by-step and making it hard to refute.</p>
+                         <div class="mt-4 space-y-4">
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Point</h4><p>State your argument in a single, clear, and concise sentence. This is the headline for your argument.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Explain</h4><p>Provide the logical reason why your point is true. This is the "mechanism" of your argument. Ask yourself "why?" multiple times to deepen your analysis. Explain the incentives of actors and the chain of cause and effect.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Example</h4><p>Give a specific, real-world example or a well-reasoned hypothetical that illustrates your explanation in action. An example doesn't prove your point, but it makes your explanation more plausible and memorable.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Link</h4><p>Connect your argument back to the core question of the debate. Explain why this specific point is important and how it helps your side win. This is where you connect back to your team's overall aim, as defined in the <a href="#cpr" class="text-brand-teal font-bold">Resolution</a> of your CPR.</p></div>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl mb-4">Good vs. Bad PEEL</h3>
+                         <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal mb-2">THBT standardized testing is more harmful than beneficial.</h4>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-check-circle mr-2 text-green-500"></i>Good Example</h5>
+                                    <p><strong>P:</strong> Standardized testing perpetuates educational inequality. <strong>E:</strong> Because these tests are expensive to prepare for, wealthy families can afford extensive tutoring and prep courses, giving their children a significant advantage. This transforms the test from a measure of aptitude into a measure of wealth. <strong>E:</strong> For instance, the SAT has been shown to have a strong correlation with family income; students from the highest income brackets consistently score hundreds of points higher than those from the lowest. <strong>L:</strong> Therefore, by relying on these tests, we are not creating a meritocracy, but are actively entrenching the privileges of the wealthy, which is the most significant harm in a debate about fairness in education.</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-times-circle mr-2 text-red-500"></i>Bad Example</h5>
+                                    <p><strong>P:</strong> Standardized tests are bad. <strong>E:</strong> They don't really test intelligence. <strong>E:</strong> The SAT is a bad test. <strong>L:</strong> So we should get rid of them.</p>
+                                    <p class="mt-2 text-xs text-brand-gray"><em>(Why it's bad: The point is a vague assertion, the explanation lacks a mechanism, the example is just a name-drop, and the link has no weighing.)</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="stakeholders" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-users text-lime-600 mr-3"></i>Stakeholder Analysis</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is Stakeholder Analysis?</h3>
+                        <p>Debates are about people. Stakeholder analysis is the process of identifying the key groups affected by a motion and analyzing their interests and incentives. This is one of the best ways to find the most important arguments in a round.</p>
+                        <h4 class="text-xl font-bold font-sans text-brand-teal mt-4 mb-2">How to Use a Stakeholder Matrix</h4>
+                        <p>A stakeholder matrix helps you organize your thoughts. For each stakeholder, you should identify their current situation, their core interests, how the motion impacts them, and why that impact is important.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">Stakeholder Matrix Example</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange mb-2">THW implement a "fat tax" on sugary drinks.</h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm mt-4">
+                                    <thead class="bg-gray-200 font-sans uppercase">
+                                        <tr>
+                                            <th class="p-2">Stakeholder</th>
+                                            <th class="p-2">Interests</th>
+                                            <th class="p-2">Impact of Motion</th>
+                                            <th class="p-2">Relevance to Debate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b"><td class="p-2 font-bold">Low-Income Consumers</td><td class="p-2">Affordable food, personal autonomy</td><td class="p-2">Price of common goods increases (regressive financial harm)</td><td class="p-2">Most vulnerable group; debate hinges on whether health benefits outweigh this harm.</td></tr>
+                                        <tr class="border-b"><td class="p-2 font-bold">Beverage Corporations</td><td class="p-2">Profit, market share</td><td class="p-2">Reduced sales, potential need to reformulate products</td><td class="p-2">Powerful actor whose opposition makes the policy difficult to implement.</td></tr>
+                                        <tr class="border-b"><td class="p-2 font-bold">Government</td><td class="p-2">Public health, tax revenue, economic stability</td><td class="p-2">Improved health outcomes vs. potential job losses in beverage industry</td><td class="p-2">The central actor weighing the trade-offs for society as a whole.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nile" class="page-section">
+                 <h2 class="text-4xl mb-8"><i class="fa-solid fa-compass-drafting text-violet-500 mr-3"></i>The NILE Framework</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is NILE?</h3>
+                        <p>NILE helps you build a diverse and robust case by prompting four different kinds of arguments. Instead of making four similar points, NILE pushes you to argue from different philosophical angles, making your case more resilient and comprehensive.</p>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-4 mt-4">
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Necessity</h4><p>Why must we act now? This argument establishes urgency. It proves that the status quo is not just bad, but actively harmful or getting worse. It answers the "why now?" question, making the debate feel important.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Impact</h4><p>What are the long-term consequences? This focuses on the scale and significance of the outcome. It explains how your policy will lead to the best possible future by creating broad, positive changes for society, the economy, or the environment.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Legitimacy</h4><p>What principle justifies this? This is an argument from moral philosophy. It claims your side is right based on a core value like fairness, autonomy, rights, or justice, regardless of the practical outcomes. It shows your side is morally consistent.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Effectiveness</h4><p>How will this change behavior? This is a practical argument about incentives. It explains how the motion will work in the real world by altering the behavior of key stakeholders in a predictable and beneficial way. It proves your plan is plausible.</p></div>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl mb-4">NILE Example</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal mb-2">THBT social media has done more harm than good.</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Necessity:</strong> The current trajectory of teen mental health, which is strongly correlated with social media use, constitutes a crisis that demands immediate action to avert further harm.</li>
+                                <li><strong>Impact:</strong> In the long term, the algorithmic promotion of outrage over nuance erodes the shared factual reality required for a functioning democracy, an much more important impact than any connective benefits.</li>
+                                <li><strong>Legitimacy:</strong> The business model of social media, predicated on harvesting vast amounts of personal data without meaningful consent, is a fundamental violation of the right to privacy.</li>
+                                <li><strong>Effectiveness:</strong> The platforms are designed to be addictive, changing human behavior to prioritize short-term validation over genuine connection, which is a predictable and harmful effect of their core mechanics.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="mice" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-brain text-amber-500 mr-3"></i>MICE Incentives</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is MICE?</h3>
+                        <p>MICE is a framework for analyzing why individuals and groups act the way they do. When you analyze a stakeholder, you can use MICE to predict their behavior by understanding their core motivations. This makes your analysis deeper and more persuasive.</p>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-4 mt-4">
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Money</h4><p>The drive for financial gain, economic security, and material well-being. This is often the most straightforward incentive for corporations and individuals in economic debates.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Ideology</h4><p>The drive to act in accordance with one's beliefs, values, and worldview. This can be political, religious, or moral, and often explains actions that seem to run counter to material self-interest.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-teal">Coercion</h4><p>The drive to act based on fear or external pressure. An actor is coerced when they act to avoid a negative consequence, such as punishment, social ostracism, or physical harm.</p></div>
+                            <div><h4 class="text-xl font-bold font-sans text-brand-orange">Ego</h4><p>The drive for personal fulfillment, respect, pride, and a sense of purpose. This isn't just about arrogance; it's about the deep human need to feel valued and maintain a positive self-image.</p></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">MICE Example</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal mb-2">THW hold social media platforms legally liable for harmful user-generated content.</h4>
+                            <p class="text-sm font-bold mb-2">Analysis of a Social Media CEO's incentives:</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Money:</strong> The CEO's primary incentive is to maximize profit. They will resist this motion because content moderation at the scale required is extremely expensive and would reduce profits. Their compensation is tied to stock performance, which is tied to user engagement, and controversial content is often highly engaging.</li>
+                                <li><strong>Ideology:</strong> The CEO may genuinely believe in a libertarian interpretation of "free speech," arguing that their platform is a neutral public square and should not be the arbiter of truth. They will frame their opposition to the motion as a defense of this principle.</li>
+                                <li><strong>Coercion:</strong> If the law passes, the CEO will be forced to invest heavily in moderation to avoid massive fines and lawsuits. The fear of legal and financial punishment becomes a powerful coercive incentive to change their behavior and police their platform.</li>
+                                <li><strong>Ego:</strong> The CEO's self-image is tied to being seen as an innovator and a champion of free expression. They will be motivated to fight the motion to protect this legacy and avoid the public perception of being a censor or a purveyor of harmful content.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rebuttal" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-shield-halved text-red-600 mr-3"></i>Rebuttal</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What is Rebuttal?</h3>
+                        <p>Rebuttal is the art of dismantling your opponent's arguments. It's not enough to present your own case; you must also show why the other side is wrong. Good rebuttal directly engages with the opponent's logic and proves it to be flawed, irrelevant, or less important than your own points.</p>
+                         <h4 class="text-xl font-bold font-sans text-brand-teal mt-4 mb-2">How to Structure Rebuttal</h4>
+                        <p>Use a simple, three-step process for every rebuttal point:</p>
+                        <ol class="list-decimal list-inside mt-2 space-y-1">
+                            <li><strong>"They said..."</strong> - State their argument clearly and concisely.</li>
+                            <li><strong>"But..."</strong> - Explain exactly why their argument is wrong. (e.g., logical flaw, incorrect fact, mischaracterization).</li>
+                            <li><strong>"Therefore..."</strong> - Explain the implication. Why does this rebuttal matter? How does it weaken their case and strengthen yours?</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">Good vs. Bad Rebuttal</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange mb-2">Opponent's Argument: "A tax on sugary drinks is regressive and unfairly harms the poor."</h4>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-check-circle mr-2 text-green-500"></i>Good Rebuttal</h5>
+                                    <p>"They said this tax unfairly harms the poor. But this argument ignores that the health consequences of obesity and diabetes, like lost wages and high medical bills, are also disproportionately borne by the poor. While our policy has a short-term financial cost, their world locks the poor into a long-term cycle of poor health and poverty. Therefore, our policy is actually more progressive because it addresses a root cause of inequality, making it the more compassionate choice."</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-times-circle mr-2 text-red-500"></i>Bad Rebuttal</h5>
+                                    <p>"They said this hurts the poor, but that's not true. Poor people should just drink healthier things. This argument is wrong."</p>
+                                    <p class="mt-2 text-xs text-brand-gray"><em>(Why it's bad: It's an assertion, not an argument. It dismisses the point without engaging its logic and offers no counter-analysis or weighing.)</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pois" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-hand-pointer text-orange-500 mr-3"></i>Points of Information (POIs)</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What are POIs?</h3>
+                        <p>A Point of Information is a short question or statement (under 15 seconds) offered to an opponent during their speech. They are a crucial tool for engagement. You should aim to offer several POIs during each opponent's speech and accept 1-2.</p>
+                        <h4 class="text-xl font-bold font-sans text-brand-teal mt-4 mb-2">Types of POIs</h4>
+                        <ul class="list-disc list-inside mt-2 space-y-2">
+                           <li><strong>Clarification:</strong> Ask for a definition or detail if the speaker is being vague. "On that, could you clarify what you mean by 'a significant investment'?"</li>
+                           <li><strong>Challenge:</strong> Directly question the logic or evidence of their point. "On that, if your plan is so effective, why has it failed in the real-world example of X?"</li>
+                           <li><strong>Contradiction:</strong> Point out an inconsistency with something their partner said. "On that, your partner said this policy was about freedom, but you're arguing it's about safety. Which is it?"</li>
+                           <li><strong>Setup:</strong> Ask a seemingly innocent question that sets up an argument your partner will make later. "On that, would you agree that the primary duty of a state is to protect its most vulnerable citizens?"</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">Good vs. Bad POIs</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange mb-2">Context: An opponent is arguing that prisons successfully rehabilitate criminals.</h4>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-check-circle mr-2 text-green-500"></i>Good POI</h5>
+                                    <p>"Given the extremely high rates of re-offense for former prisoners, on what basis can you claim the system is rehabilitating anyone?"</p>
+                                    <p class="mt-2 text-xs text-brand-gray"><em>(Why it's good: It's short, sharp, and uses a fact to directly challenge the premise of their argument, forcing them to defend their logic.)</em></p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-2"><i class="fa-solid fa-times-circle mr-2 text-red-500"></i>Bad POI</h5>
+                                    <p>"Don't you think that's wrong? Because there are lots of studies that show that when people get out of prison they just commit more crimes because they can't get a job and society rejects them, so the whole system is a failure."</p>
+                                    <p class="mt-2 text-xs text-brand-gray"><em>(Why it's bad: It's a long, rambling speech, not a question. The speaker will simply wave it down and continue their speech uninterrupted.)</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="clashes" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-bolt text-fuchsia-500 mr-3"></i>Points of Clash</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-8">
+                    <div>
+                        <h3 class="text-2xl mb-2">What are Clashes?</h3>
+                        <p>Clashes are the main points of disagreement in the debate. They are the fundamental questions that the debate boils down to. Identifying these clashes allows you to structure your later speeches (especially the summary/whip speech) around the most important issues, showing the judge why you win the arguments that matter most.</p>
+                        <h4 class="text-xl font-bold font-sans text-brand-teal mt-4 mb-2">How to Win Clashes with Weighing</h4>
+                        <p>Once you identify a clash, you need to prove you've won it. You do this through <strong>weighing</strong>: directly comparing your impacts to your opponent's and showing why yours are more significant. Common weighing mechanisms include:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-2">
+                            <li><strong>Magnitude/Scale:</strong> Our impact affects more people.</li>
+                            <li><strong>Severity:</strong> Our impact is more intense or harmful/beneficial for those it affects.</li>
+                            <li><strong>Likelihood:</strong> Our impact is more certain to happen than their speculative one.</li>
+                            <li><strong>Timeframe:</strong> Our impact happens sooner, addressing an urgent problem.</li>
+                            <li><strong>Vulnerability:</strong> Our impact helps or protects a group that needs special consideration.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl mb-4">Clash Example</h3>
+                        <div class="bg-gray-50 p-6 rounded-lg border border-border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange mb-2">THW implement a Universal Basic Income (UBI).</h4>
+                            <p>After the first few speeches, two major clashes have emerged:</p>
+                            <ol class="list-decimal list-inside mt-4 space-y-2">
+                                <li><strong>The Clash of Economic Impact:</strong> The Government argues UBI stimulates the economy and reduces poverty. The Opposition argues it creates massive inflation and disincentivizes work. The question is: What is the most likely economic outcome?</li>
+                                <li><strong>The Clash of Human Dignity:</strong> The Government argues UBI provides a fundamental safety net that gives people autonomy and dignity. The Opposition argues that true dignity comes from work and contribution, which UBI undermines. The question is: What is the true source of individual dignity and self-worth?</li>
+                            </ol>
+                            <p class="mt-4">A good summary speaker would structure their speech around these two clashes, explaining why their team wins both using the weighing mechanisms above.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="logical-fallacies" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fas fa-theater-masks text-yellow-500 mr-3"></i>Logical Fallacies</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm space-y-10">
+                    <div>
+                        <h3 class="text-2xl mb-2 text-brand-teal">What are Logical Fallacies?</h3>
+                        <p>A logical fallacy is an error in reasoning that makes an argument invalid. They are surprisingly common in everyday conversation and debate. Learning to spot them is like gaining a superpower: you can identify weak points in your opponent's case and strengthen your own by avoiding these pitfalls.</p>
+                    </div>
+                    <div class="space-y-8">
+                        <div class="p-6 bg-gray-50 rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">1. Straw Man</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Misrepresenting or exaggerating your opponent's argument to make it easier to attack. Instead of debating their actual point, you attack a weaker, distorted version (the "straw man").</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Always address the strongest, most charitable interpretation of your opponent's argument. Steel-man their case before you rebut it.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> Listen for phrases like "So what you're really saying is..." or "So you believe that..." followed by an extreme or simplistic version of your argument.</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> Call it out directly. "The opposition has built a straw man of our case. They claim we want to [distorted version], but what we actually argued was [your actual point]. Let's debate the real issue." This shows the judge you are the more reasonable and engaged team.</p>
+                        </div>
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">2. Ad Hominem</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Attacking the person making the argument, rather than the argument itself. This shifts the focus from the logic of the case to the character of the speaker.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Focus exclusively on the content of your opponent's speech. Their motivations, background, or character are irrelevant to the truth of their claims.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> Any time an opponent criticizes a speaker's personal traits ("You can't trust them, they're a politician") instead of their logic, it's an ad hominem.</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "The opposition has spent a minute attacking our team instead of our arguments. This is an ad hominem fallacy. Let's ignore the personal attacks and return to the actual substance of this debate, which is..."</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">3. Slippery Slope</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Arguing that a small, initial step will inevitably lead to a chain of related, negative events without providing sufficient evidence for this chain reaction.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> If you want to argue long-term consequences, you must prove each link in the causal chain. Explain the mechanism for why A leads to B, B leads to C, and so on.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> Listen for a series of escalating, unsupported claims. "If we allow A, then B will happen, and then C, and soon we'll have Z!"</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "The opposition has presented a slippery slope fallacy. They have not proven why our policy would inevitably lead to these extreme outcomes. They've jumped from A to Z without any analysis of the steps in between. Let's focus on the probable, not the speculative."</p>
+                        </div>
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">4. False Dichotomy</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Presenting a situation as having only two possible options when, in fact, there are other alternatives. This is often an "either/or" argument that forces a choice between two extremes.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Acknowledge the nuance and complexity of the issue. Recognize that there may be middle ground or alternative solutions.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> When an opponent says, "We have to choose between X and Y," or "It's either our plan or chaos."</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "The other team has presented a false dichotomy. They claim we must choose between their extreme policy and total disaster. This is not true. There is a third, more reasonable option, which is..." This allows you to introduce a more nuanced stance or a counter-model.</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">5. Hasty Generalization</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Drawing a broad conclusion based on a small or unrepresentative sample size. A single example is used to prove a general rule.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Use examples to illustrate a point you've already proven with logic, not as proof itself. If you use an example, explain why it's representative of a wider trend.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> When a speaker uses one anecdote to make a sweeping claim. "I know someone who did X, and it was terrible. Therefore, X is always terrible."</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "The opposition's entire argument rests on a single anecdote. This is a hasty generalization. They haven't provided any structural reasons to believe this one case is representative of a broader trend. Our argument, on the other hand, is based on..."</p>
+                        </div>
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">6. Appeal to Authority</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Claiming something must be true simply because a person of authority (or a supposed expert) said it, without any other supporting evidence.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Use expert opinions as supporting evidence, but always explain the logic behind that opinion. The reasoning is more important than the person who said it.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> "As Nobel laureate Dr. X said..." or "The UN report states..." without any further explanation of the data or reasoning.</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "While we respect Dr. X, simply stating their conclusion is an appeal to authority, not an argument. The opposition needs to explain the reasoning behind that conclusion for it to have weight in this debate. Without that, it's just an unsubstantiated claim."</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-orange">7. Red Herring</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> Introducing an irrelevant topic or piece of information to divert attention away from the central issue of the debate.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Stay focused on the core clashes of the debate. Ensure every point you make directly links back to the motion.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> When an opponent starts talking about an issue that is only tangentially related to the motion, especially in response to a difficult question or point.</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "This is a red herring. The point about [irrelevant topic] may be interesting, but it does not address the central question of this debate, which is [the actual issue]. Let's get back on track." This shows you have control over the direction of the debate.</p>
+                        </div>
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h4 class="text-xl font-bold font-sans text-brand-teal">8. Circular Reasoning</h4>
+                            <p class="mt-2"><strong>What It Is:</strong> An argument that begins with the conclusion it's trying to prove. The premise and the conclusion are the same, just restated in different words.</p>
+                            <p class="mt-2"><strong>How to Avoid It:</strong> Ensure your premises are independent of your conclusion. Your evidence should build towards your claim, not just restate it.</p>
+                            <p class="mt-2"><strong>How to Spot It:</strong> "X is true because of Y, and Y is true because of X." For example, "This policy is good for the economy because it stimulates economic growth."</p>
+                            <p class="mt-2"><strong>How to Use It Strategically:</strong> "The opposition's argument is circular. They've told us their policy is good because it's good, without providing any external mechanism or proof. This is an assertion, not an argument, and should be given no weight."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="manner-lab" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-flask-vial text-cyan-500 mr-3"></i>Manner Lab</h2>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="w-full lg:w-3/5 bg-white p-6 rounded-lg border border-border shadow-sm">
+                       <div id="manner-contents" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    </div>
+                    <div class="w-full lg:w-2/5 flex flex-col gap-8">
+                        <div class="bg-white p-6 rounded-lg border border-border shadow-sm">
+                            <h3 class="text-2xl mb-4">Style Profile</h3>
+                            <canvas id="manner-chart-lab"></canvas>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg border border-border shadow-sm">
+                            <h3 class="text-2xl mb-4">Speaker Archetypes</h3>
+                            <p class="text-sm mb-4">Select an archetype to see their typical manner profile. Use these as a guide to understand common speaking styles.</p>
+                            <select id="archetype-select" class="w-full p-2 border border-border rounded-md font-sans">
+                                <option value="custom">Your Custom Style</option>
+                            </select>
+                            <div id="archetype-description" class="text-sm mt-4 p-3 bg-gray-50 rounded-md border border-border h-24 overflow-y-auto">Select an archetype to see a description.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="motion-generator" class="page-section">
+                <h2 class="text-4xl mb-8"><i class="fa-solid fa-lightbulb text-amber-500 mr-3"></i>Motion Generator</h2>
+                <div class="bg-white p-8 rounded-lg border border-border shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+                        <div>
+                            <label for="difficulty-filter" class="block text-sm font-medium text-brand-blue mb-1">Filter by Difficulty</label>
+                            <select id="difficulty-filter" class="w-full p-2 border border-border rounded-md font-sans">
+                                <option value="all">All Difficulties</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="category-filter" class="block text-sm font-medium text-brand-blue mb-1">Filter by Category</label>
+                            <select id="category-filter" class="w-full p-2 border border-border rounded-md font-sans">
+                                <option value="all">All Categories</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Environment">Environment</option>
+                                <option value="Media">Media</option>
+                                <option value="Politics">Politics</option>
+                                <option value="Law">Law</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Social">Social</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p>Select how many random motions you'd like to generate.</p>
+                        <div id="motion-count-selector" class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg font-sans">
+                            <button data-count="1" class="motion-count-btn bg-brand-teal text-white font-bold py-2 px-4 rounded-md">1</button>
+                            <button data-count="3" class="motion-count-btn py-2 px-4 rounded-md">3</button>
+                            <button data-count="5" class="motion-count-btn py-2 px-4 rounded-md">5</button>
+                        </div>
+                    </div>
+                    <button id="generate-motion-btn" class="w-full mt-6 bg-brand-orange text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-opacity-90 transition-all font-sans">
+                        Generate Motions
+                    </button>
+                    <div id="motion-output" class="mt-8 space-y-4"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data and setup...
+            const motionsDB = {
+                "Beginner": {
+                    "Social": [{"t":"THW ban all forms of advertising targeting children.","p":"THW","cats":["Social","Law","Economics"]},{"t":"THW abolish private schools.","p":"THW","cats":["Social","Economics"]},{"t":"THR the rise of 'fast fashion'.","p":"THR","cats":["Social","Economics","Environment"]},{"t":"THBT professional sports have become over-commercialized.","p":"THBT","cats":["Social","Economics","Media"]},{"t":"THW make voting mandatory.","p":"THW","cats":["Social","Politics"]},{"t":"THW ban beauty pageants.","p":"THW","cats":["Social","Media"]},{"t":"THBT all education should be co-educational (mixed-gender).","p":"THBT","cats":["Social"]},{"t":"THW ban homework for primary school students.","p":"THW","cats":["Social"]},{"t":"THBT celebrities have a moral obligation to be positive role models.","p":"THBT","cats":["Social","Media"]},{"t":"THW make school uniforms compulsory in all schools.","p":"THW","cats":["Social","Economics"]},{"t":"THW allow students to grade their teachers.","p":"THW","cats":["Social"]},{"t":"THS a vegetarian diet.","p":"THS","cats":["Social","Environment","Economics"]},{"t":"THBT the voting age should be lowered to 16.","p":"THBT","cats":["Social","Politics"]},{"t":"THW ban violent video games.","p":"THW","cats":["Social","Media","Technology"]},{"t":"THBT it is better to be intelligent than to be popular.","p":"THBT","cats":["Social"]},{"t":"THW make all public transport free.","p":"THW","cats":["Social","Economics","Environment"]},{"t":"THW make community service a compulsory part of the high school curriculum.","p":"THW","cats":["Social"]},{"t":"THW ban the use of animals in circuses.","p":"THW","cats":["Social","Law","Environment"]},{"t":"THBT parents should have access to their children's social media accounts.","p":"THBT","cats":["Social","Law","Technology"]},{"t":"THW abolish the death penalty.","p":"THW","cats":["Social","Law"]}],
+                    "Economics": [{"t":"THBT space exploration is a waste of resources.","p":"THBT","cats":["Economics","Technology"]},{"t":"THBT all university education should be free.","p":"THBT","cats":["Economics","Social"]},{"t":"THW ban unpaid internships.","p":"THW","cats":["Economics","Social","Law"]},{"t":"THW significantly increase the minimum wage.","p":"THW","cats":["Economics","Social"]},{"t":"THW impose a 'sugar tax' on unhealthy foods and drinks.","p":"THW","cats":["Economics","Social","Law"]},{"t":"THBT developing countries should prioritize economic growth over environmental protection.","p":"THBT","cats":["Economics","Environment","Politics"]},{"t":"THW ban single-use plastics.","p":"THW","cats":["Economics","Environment","Law"]},{"t":"THW replace income tax with a consumption tax.","p":"THW","cats":["Economics","Social"]},{"t":"THBT tourism does more harm than good for developing countries.","p":"THBT","cats":["Economics","Social","Environment"]},{"t":"THW provide free internet access for all citizens.","p":"THW","cats":["Economics","Social","Technology"]}],
+                    "Politics": [{"t":"THBT social media has done more harm than good for democracy.","p":"THBT","cats":["Politics","Media","Technology"]},{"t":"THW abolish the monarchy.","p":"THW","cats":["Politics","Social"]},{"t":"THBT compulsory military service is beneficial for a country.","p":"THBT","cats":["Politics","Social"]},{"t":"THBT states should be allowed to secede from a country.","p":"THBT","cats":["Politics","Law"]},{"t":"THW only allow citizens who pass a political knowledge test to vote.","p":"THW","cats":["Politics","Social","Law"]},{"t":"THBT former colonial powers should pay reparations to their former colonies.","p":"THBT","cats":["Politics","Economics","Social","Law"]},{"t":"THW ban political dynasties.","p":"THW","cats":["Politics","Social"]},{"t":"THBT the United Nations is obsolete.","p":"THBT","cats":["Politics"]},{"t":"THW make all elections publicly funded.","p":"THW","cats":["Politics","Economics"]},{"t":"THW tie foreign aid to a recipient country's human rights record.","p":"THW","cats":["Politics","Economics","Law"]}]
+                },
+                "Intermediate": {
+                    "Social": [{"t":"THR the narrative of 'the chosen one' in fiction.","p":"THR","cats":["Social","Media"]},{"t":"THR the commercialization of Pride parades.","p":"THR","cats":["Social","Economics","Media"]},{"t":"THW abolish the Olympic Games.","p":"THW","cats":["Social","Politics","Economics"]},{"t":"TH as a low-income student would choose a vocational school over a traditional university.","p":"THS","cats":["Social","Economics"]},{"t":"THBT museums should return historical artifacts to their countries of origin.","p":"THBT","cats":["Social","Politics","Law"]},{"t":"THBT it is legitimate for the state to lie to its citizens during a public health crisis.","p":"THBT","cats":["Social","Politics","Law"]},{"t":"THW ban faith-based schools.","p":"THW","cats":["Social","Law"]},{"t":"THBT identity politics has been detrimental to social progress.","p":"THBT","cats":["Social","Politics"]},{"t":"THW allow for the commercialization of human organs.","p":"THW","cats":["Social","Law","Economics"]},{"t":"TH as a minority group, would prefer descriptive representation over substantive representation.","p":"THS","cats":["Social","Politics"]},{"t":"THBT the decline of traditional family structures is a positive development.","p":"THBT","cats":["Social"]},{"t":"THW introduce a 'right to be forgotten' on the internet.","p":"THW","cats":["Social","Law","Technology"]},{"t":"THS the use of performance-enhancing drugs in sports.","p":"THS","cats":["Social","Law"]},{"t":"THBT we should embrace a culture of 'cancel culture'.","p":"THBT","cats":["Social","Media"]},{"t":"THW mandate that a certain percentage of board members of large corporations be women.","p":"THW","cats":["Social","Law","Economics"]}],
+                    "Economics": [{"t":"THW impose a global carbon tax.","p":"THW","cats":["Economics","Environment","Politics"]},{"t":"This House Believes That the gig economy is exploitative.","p":"THBT","cats":["Economics","Social","Law"]},{"t":"THW implement a universal basic income.","p":"THW","cats":["Economics","Social"]},{"t":"THW break up big tech companies.","p":"THW","cats":["Economics","Law","Technology"]},{"t":"THBT free trade has done more harm than good for developing nations.","p":"THBT","cats":["Economics","Politics"]},{"t":"THW abolish intellectual property rights for life-saving medicines.","p":"THW","cats":["Economics","Law","Social"]},{"t":"THS the use of sovereign wealth funds to invest in foreign countries.","p":"THS","cats":["Economics","Politics"]},{"t":"THBT the primary goal of a corporation should be to maximize shareholder profit.","p":"THBT","cats":["Economics","Social","Law"]},{"t":"THW forgive all student debt.","p":"THW","cats":["Economics","Social"]}],
+                    "Politics": [{"t":"THW require all elected officials to place their assets in a blind trust.","p":"THW","cats":["Politics","Law","Economics"]},{"t":"THW allow for humanitarian intervention without UN Security Council approval.","p":"THW","cats":["Politics","Law"]},{"t":"THBT nations have a right to nuclear weapons.","p":"THBT","cats":["Politics","Technology"]},{"t":"THW make lobbying illegal.","p":"THW","cats":["Politics","Law","Economics"]},{"t":"THS a two-state solution for Israel and Palestine.","p":"THS","cats":["Politics"]},{"t":"THW create a global government.","p":"THW","cats":["Politics"]},{"t":"THBT it is legitimate for a state to assassinate the leaders of terrorist organizations.","p":"THBT","cats":["Politics","Law"]},{"t":"THW ban the use of private military contractors.","p":"THW","cats":["Politics","Law","Economics"]},{"t":"THS the principle of 'responsibility to protect' (R2P).","p":"THS","cats":["Politics","Law"]},{"t":"THBT the world would be a better place if all countries were democracies.","p":"THBT","cats":["Politics","Social"]}],
+                    "Law": [{"t":"THW replace traditional juries with professional jurors.","p":"THW","cats":["Law","Social"]},{"t":"THW allow for the use of evidence obtained illegally if it proves guilt.","p":"THW","cats":["Law"]},{"t":"THBT the law should recognize a 'right to die'.","p":"THBT","cats":["Law","Social"]},{"t":"THW ban the insanity defense.","p":"THW","cats":["Law","Social"]},{"t":"THW allow for the prosecution of soldiers for war crimes, even if they were following orders.","p":"THW","cats":["Law","Politics"]},{"t":"THBT restorative justice should be the primary model for dealing with crime.","p":"THBT","cats":["Law","Social"]},{"t":"THW allow citizens to sue their government for policy failures.","p":"THW","cats":["Law","Politics"]},{"t":"THW ban the use of solitary confinement in prisons.","p":"THW","cats":["Law","Social"]},{"t":"THBT the state should have the power to censor art.","p":"THBT","cats":["Law","Social","Media"]},{"t":"THW hold individuals criminally liable for failing to report a crime.","p":"THW","cats":["Law","Social"]}]
+                },
+                "Advanced": {
+                    "Social": [{"t":"TH as the feminist movement would reject 'girl boss' feminism.","p":"THS","cats":["Social","Economics"]},{"t":"THP a world where everyone is immortal.","p":"THP","cats":["Social","Technology","Economics"]},{"t":"THBT the concept of meritocracy is a myth that perpetuates inequality.","p":"THBT","cats":["Social","Economics","Politics"]},{"t":"THS the use of radical social movements (e.g., Extinction Rebellion) to achieve political change.","p":"THS","cats":["Social","Politics","Environment"]},{"t":"THW allow individuals to sell their citizenship.","p":"THW","cats":["Social","Politics","Economics","Law"]},{"t":"THBT post-colonial states should reject the concept of the nation-state.","p":"THBT","cats":["Social","Politics"]},{"t":"THW require individuals to pass a parenting license test before having children.","p":"THW","cats":["Social","Law"]},{"t":"THS a world without religion.","p":"THS","cats":["Social"]},{"t":"THBT the pursuit of individual happiness is a futile and harmful goal.","p":"THBT","cats":["Social"]},{"t":"THW replace monogamy with polyamory as the dominant relationship model.","p":"THW","cats":["Social"]}],
+                    "Economics": [{"t":"THS the creation of a global currency.","p":"THS","cats":["Economics","Politics"]},{"t":"THW abolish inheritance.","p":"THW","cats":["Economics","Social","Law"]},{"t":"THBT the world should adopt a post-growth economic model.","p":"THBT","cats":["Economics","Environment","Social"]},{"t":"THS a universal basic income over a universal job guarantee.","p":"THS","cats":["Economics","Social"]},{"t":"THW allow for the creation of private currencies.","p":"THW","cats":["Economics","Technology","Law"]},{"t":"THBT the efficient market hypothesis is false.","p":"THBT","cats":["Economics"]},{"t":"THW nationalize all banks.","p":"THW","cats":["Economics","Politics","Law"]},{"t":"THS the use of 'sin taxes' to fund public services.","p":"THS","cats":["Economics","Social","Law"]},{"t":"THBT intellectual property laws do more harm than good.","p":"THBT","cats":["Economics","Law","Technology","Social"]},{"t":"THW implement a global minimum corporate tax rate.","p":"THW","cats":["Economics","Politics","Law"]}],
+                    "Technology": [{"t":"THW ban the development of artificial general intelligence.","p":"THW","cats":["Technology"]},{"t":"THBT we should upload our consciousness to a digital realm.","p":"THBT","cats":["Technology","Social"]},{"t":"THS the use of brain-computer interfaces to enhance human intelligence.","p":"THS","cats":["Technology","Social"]},{"t":"THW create a global AI regulatory agency with the power to shut down any AI system deemed a threat.","p":"THW","cats":["Technology","Politics","Law"]},{"t":"THBT the internet has done more to fragment society than to unite it.","p":"THBT","cats":["Technology","Social","Media"]},{"t":"THS the use of autonomous corporations (DAOs) to run businesses.","p":"THS","cats":["Technology","Economics","Law"]},{"t":"THW ban the use of social credit systems.","p":"THW","cats":["Technology","Social","Politics","Law"]},{"t":"THBT the singularity is inevitable and we should embrace it.","p":"THBT","cats":["Technology","Social"]},{"t":"THW create a global digital identity for all citizens.","p":"THW","cats":["Technology","Politics","Law","Social"]},{"t":"THS the use of swarm robotics for military purposes.","p":"THS","cats":["Technology","Politics"]}]
+                }
+            };
+
+            const mannerData = {
+                volume: { label: "Volume", levels: ["Very Soft", "Soft", "Conversational", "Loud", "Yelling"], desc: "The loudness or softness of the speaker's voice.", details: [ {u: "Whispering for emphasis, creating intrigue.", c: "Quiet, intimate, should not be used in speeches.", e: "A storyteller sharing a secret."}, {u: "Creating intimacy, conveying sadness.", c: "Quiet, gentle, can create calm.", e: "A person sharing a heartfelt story."}, {u: "Most speaking situations.", c: "Clear, audible, and comfortable.", e: "A casual lunch conversation."}, {u: "Emphasizing points, conveying excitement.", c: "Strong, clear, and attention-grabbing.", e: "A coach motivating a team."}, {u: "Expressing strong emotion, projecting to a large audience.", c: "Forceful, intense, can be overwhelming.", e: "A wrestler's promo or character in duress."} ] },
+                tone: { label: "Tone", levels: ["Monotone", "Flat", "Expressive", "Emphatic", "Dramatic"], desc: "The emotional quality of the speaker's voice.", details: [ {u: "Technical or factual presentations.", c: "Dull, unemotional, difficult to listen to.", e: "A boring professor droning on."}, {u: "Suggesting neutrality or detachment.", c: "Unemotional, even, lacks emphasis.", e: "A news anchor delivering a report."}, {u: "Conveying a range of emotions.", c: "Varied, engaging, conveys emotion effectively.", e: "A storyteller captivating an audience."}, {u: "Expressing strong feelings or conviction.", c: "Forceful, passionate, and persuasive.", e: "A politician giving a campaign speech."}, {u: "Exaggerated emotional expression.", c: "Over-the-top, theatrical, can be humorous or intense.", e: "A character in a dramatic performance."} ] },
+                pace: { label: "Pace & Pauses", levels: ["Rushed", "Deliberate", "Moderate", "Strategic", "Masterful"], desc: "The speed and rhythm of delivery.", details: [ {u: "Continuous delivery with little to no variation.", c: "Hurried, breathless, difficult to follow.", e: "A speaker racing through content."}, {u: "A slower pace with some pauses, but often lacking variation.", c: "Somewhat slow, pauses not used effectively.", e: "Someone reading aloud with a consistent speed."}, {u: "A conversational pace with varied pauses for emphasis.", c: "Natural-sounding, with pauses that enhance clarity.", e: "A teacher explaining a concept."}, {u: "A varied pace with pauses used for dramatic effect.", c: "Thoughtful and purposeful, enhances impact.", e: "A speaker using pauses before key statements."}, {u: "A highly controlled pace with precise pauses.", c: "Expertly crafted, commands attention.", e: "An actor performing a dramatic monologue."} ] },
+                articulation: { label: "Articulation", levels: ["Incomprehensible", "Poor", "Adequate", "Good", "Excellent"], desc: "The crispness of a speaker's pronunciation.", details: [ {u: "Speech that is extremely difficult to understand.", c: "Severely slurred, mumbled, or distorted.", e: "Someone speaking with a mouth full of food."}, {u: "Frequent errors in pronunciation.", c: "Many words are slurred or indistinct.", e: "A speaker who doesn't enunciate properly."}, {u: "Generally understandable, but with occasional errors.", c: "Most words are clear, but some may be indistinct.", e: "Someone speaking conversationally without careful attention."}, {u: "Clear, accurate pronunciation.", c: "Consistent and accurate enunciation.", e: "A news anchor delivering a report."}, {u: "Impeccable pronunciation with precise enunciation.", c: "Crisp, clear, and accurate.", e: "An actor performing a classical play."} ] },
+                emphasis: { label: "Emphasis", levels: ["Monotonous", "Weak", "Moderate", "Strong", "Exaggerated"], desc: "The stress placed on words to convey meaning.", details: [ {u: "No variation in stress or intonation.", c: "All words given equal weight, unengaging.", e: "Reading a technical document without inflection."}, {u: "Minimal variation in stress, failing to highlight key words.", c: "Important points are not sufficiently stressed.", e: "Delivering a persuasive speech without vocal stress."}, {u: "Natural and effective use of stress to guide the listener.", c: "Balanced and appropriate use of emphasis.", e: "A person telling a story, using emphasis for clarity."}, {u: "Clear and deliberate stress to create impact.", c: "Forceful and effective use of emphasis.", e: "A debater stressing key arguments."}, {u: "Excessive or misplaced emphasis that distorts the message.", c: "Sounds unnatural or insincere.", e: "An actor overacting."} ] },
+                certainty: { label: "Certainty", levels: ["High Uncertainty", "Uncertain", "Neutral", "Certain", "Unequivocal"], desc: "The degree of confidence conveyed.", details: [ {u: "Expressing complete doubt.", c: "Highly hesitant, uses 'I'm not sure'.", e: "A speaker undermining their own arguments."}, {u: "Indicating significant doubt.", c: "Hesitant, uses 'maybe', 'perhaps'.", e: "A speaker unsure of their facts."}, {u: "Expressing a neutral stance.", c: "Balanced, presenting information objectively.", e: "A speaker presenting both sides of an argument."}, {u: "Indicating strong confidence.", c: "Confident, uses assertive language.", e: "A speaker presenting arguments with conviction."}, {u: "Expressing absolute conviction.", c: "Forceful, unwavering. Beware of sounding delusional.", e: "A speaker leaving no room for doubt."} ] },
+                gestures: { label: "Gestures", levels: ["Minimal", "Conversational", "Expressive", "Animated", "Excessive"], desc: "Hand and body movements used by a speaker.", details: [ {u: "Holding a script, subtle movements.", c: "Restrained, controlled, text-focused.", e: "A nervous speaker relying on notes."}, {u: "Natural hand gestures accompanying speech.", c: "Balanced, fluid, supportive of content.", e: "A teacher explaining a concept."}, {u: "Pronounced gestures to convey emotion.", c: "Dynamic, varied, enhances the message.", e: "A comedian telling a story."}, {u: "Large, sweeping gestures to command attention.", c: "Energetic, purposeful, inspiring.", e: "A coach giving a motivational speech."}, {u: "Overly exaggerated or repetitive gestures.", c: "Uncontrolled, distracting, potentially irritating.", e: "A speaker who is visibly nervous."} ] },
+                eye_contact: { label: "Eye Contact", levels: ["Avoidant", "Occasional", "Conversational", "Engaging", "Intense"], desc: "The way a speaker visually engages with their audience.", details: [ {u: "Looks at notes, floor, or ceiling.", c: "Creates detachment, disinterest, nervousness.", e: "A shy speaker uncomfortable with public speaking."}, {u: "Brief glances at the audience.", c: "Shows some engagement but may convey uncertainty.", e: "A speaker reading from a script."}, {u: "Distributes eye contact evenly.", c: "Creates connection, fosters a conversational tone.", e: "A teacher explaining a lesson."}, {u: "Holds eye contact for longer periods.", c: "Conveys confidence, sincerity, and connection.", e: "A motivational speaker inspiring an audience."}, {u: "Prolonged, unwavering eye contact.", c: "Can be perceived as aggressive or intimidating.", e: "A character in a dramatic confrontation."} ] }
+            };
+            const archetypes = {
+                timid: { name: "The Timid Debater", desc: "Lacks confidence, often inaudible and hesitant. Delivery detracts from otherwise sound arguments.", settings: { volume: 1, tone: 1, pace: 1, articulation: 2, emphasis: 2, certainty: 2, gestures: 1, eye_contact: 1 } },
+                monotone: { name: "The Monotone Debater", desc: "Clear but unengaging. Speaks with little variation in tone or pace, making it difficult to emphasize key points.", settings: { volume: 3, tone: 1, pace: 2, articulation: 4, emphasis: 1, certainty: 3, gestures: 2, eye_contact: 2 } },
+                expressive: { name: "The Expressive Debater", desc: "Dynamic and engaging. Uses variation in manner to connect with the audience and make arguments more persuasive.", settings: { volume: 4, tone: 3, pace: 3, articulation: 4, emphasis: 3, certainty: 4, gestures: 3, eye_contact: 4 } },
+                masterful: { name: "The Masterful Debater", desc: "Commands the room. Uses every aspect of their delivery with precision and control to create a powerful, captivating experience.", settings: { volume: 4, tone: 4, pace: 4, articulation: 5, emphasis: 4, certainty: 5, gestures: 4, eye_contact: 4 } },
+                politician: { name: "The Politician", desc: "Emphatic and certain, but can be vague on clarity. Masters tone and pace to appear trustworthy and inspiring.", settings: { volume: 4, tone: 4, pace: 3, articulation: 3, emphasis: 4, certainty: 5, gestures: 4, eye_contact: 4 } },
+                comedian: { name: "The Comedian", desc: "Highly expressive and dramatic, using pace and tone for comedic timing. Clarity and certainty can be sacrificed for effect.", settings: { volume: 4, tone: 5, pace: 5, articulation: 4, emphasis: 5, certainty: 4, gestures: 5, eye_contact: 4 } },
+                ted: { name: "The TED Talk Speaker", desc: "Clear, expressive, and conversational. Aims to be relatable and inspiring, with measured pace and engaging eye contact.", settings: { volume: 3, tone: 3, pace: 4, articulation: 5, emphasis: 3, certainty: 4, gestures: 3, eye_contact: 4 } },
+                academic: { name: "The Academic", desc: "Precise and knowledgeable, focusing on logical clarity and evidence. Can sometimes feel detached or overly complex.", settings: { volume: 3, tone: 2, pace: 3, articulation: 5, emphasis: 3, certainty: 5, gestures: 2, eye_contact: 3 } }
+            };
+
+            let mannerChart;
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('main');
+
+            function showPage(hash) {
+                const targetId = (hash && hash.substring(1)) ? hash.substring(1) : 'home';
+                pages.forEach(page => {
+                    page.classList.toggle('active', page.id === targetId);
+                });
+                updateActiveLink(targetId);
+            }
+
+            function updateActiveLink(targetId) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href').substring(1) === targetId);
+                });
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        window.location.hash = this.getAttribute('href');
+                    }
+                });
+            });
+
+            window.addEventListener('hashchange', () => showPage(window.location.hash));
+            function closeSidebar() { sidebar.classList.add('-translate-x-full'); }
+            mobileMenuButton.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('-translate-x-full'); });
+            mainContent.addEventListener('click', closeSidebar);
+            document.querySelectorAll('#sidebar a').forEach(link => link.addEventListener('click', () => { if (window.innerWidth < 768) closeSidebar(); }));
+
+            // --- MOTION GENERATOR LOGIC ---
+            const generateBtn = document.getElementById('generate-motion-btn');
+            const motionOutput = document.getElementById('motion-output');
+            const countSelector = document.getElementById('motion-count-selector');
+            const difficultyFilter = document.getElementById('difficulty-filter');
+            const categoryFilter = document.getElementById('category-filter');
+            let motionCount = 1;
+
+            function generateMotions() {
+                const selectedDifficulty = difficultyFilter.value;
+                const selectedCategory = categoryFilter.value;
+                let potentialMotions = [];
+                
+                let difficultiesToSearch = selectedDifficulty === 'all' ? Object.keys(motionsDB) : [selectedDifficulty];
+
+                difficultiesToSearch.forEach(difficultyKey => {
+                    const difficulty = motionsDB[difficultyKey];
+                    Object.values(difficulty).forEach(categoryMotions => {
+                        categoryMotions.forEach(motion => {
+                            if (selectedCategory === 'all' || motion.cats.includes(selectedCategory)) {
+                                potentialMotions.push({ ...motion, difficulty: difficultyKey });
+                            }
+                        });
+                    });
+                });
+                
+                const uniqueMotions = Array.from(new Map(potentialMotions.map(m => [m.t, m])).values());
+
+                let outputHtml = '';
+                if (uniqueMotions.length === 0) {
+                    outputHtml = `<div class="bg-gray-50 p-4 rounded-lg border border-border text-center text-brand-gray">No motions match your selected filters.</div>`;
+                } else {
+                    const shuffled = uniqueMotions.sort(() => 0.5 - Math.random());
+                    const selected = shuffled.slice(0, motionCount);
+                    selected.forEach(motion => {
+                        const categoriesHtml = motion.cats.map(cat => `<span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-sans">${cat}</span>`).join(' ');
+                        outputHtml += `<div class="bg-gray-50 p-4 rounded-lg border border-border">
+                            <p class="text-brand-dark-gray">${motion.t}</p>
+                            <div class="text-xs mt-2 flex gap-2 flex-wrap items-center">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-sans">${motion.p}</span>
+                                <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-sans">${motion.difficulty}</span>
+                                ${categoriesHtml}
+                            </div>
+                        </div>`;
+                    });
+                }
+                motionOutput.innerHTML = outputHtml;
+            }
+
+            if (countSelector) {
+                countSelector.addEventListener('click', (e) => {
+                    if(e.target.matches('.motion-count-btn')) {
+                        motionCount = parseInt(e.target.dataset.count, 10);
+                        document.querySelectorAll('.motion-count-btn').forEach(btn => btn.classList.remove('bg-brand-teal', 'text-white', 'font-bold'));
+                        e.target.classList.add('bg-brand-teal', 'text-white', 'font-bold');
+                    }
+                });
+            }
+
+            // MODIFICATION: Only generate motions on button click
+            if (generateBtn) { generateBtn.addEventListener('click', generateMotions); }
+            
+            function setupMannerLab() {
+                const contentsContainer = document.getElementById('manner-contents');
+                const archetypeSelect = document.getElementById('archetype-select');
+                if (!contentsContainer || !archetypeSelect) return;
+
+                contentsContainer.innerHTML = ''; // Clear previous content
+                Object.keys(mannerData).forEach((key) => {
+                    const item = mannerData[key];
+                    contentsContainer.innerHTML += `
+                        <div class="bg-white p-4 rounded-lg border border-border shadow-sm">
+                            <h4 class="text-xl font-bold font-sans text-brand-blue">${item.label}</h4>
+                            <p class="mb-4 text-sm">${item.desc}</p>
+                            <div>
+                                <input type="range" id="${key}-lab" name="${key}" min="1" max="5" value="3" class="w-full">
+                                <div class="text-center text-sm text-brand-gray mt-1 font-medium" id="${key}-value-lab">${item.levels[2]}</div>
+                            </div>
+                            <div class="mt-4 text-sm space-y-3 bg-gray-50 p-4 rounded-md border border-border">
+                                <p><strong>Use:</strong> <span id="${key}-use-lab">${item.details[2].u}</span></p>
+                                <p><strong>Characteristics:</strong> <span id="${key}-char-lab">${item.details[2].c}</span></p>
+                                <p><strong>Example:</strong> <span id="${key}-ex-lab">${item.details[2].e}</span></p>
+                            </div>
+                        </div>`;
+                });
+
+                archetypeSelect.innerHTML = '<option value="custom">Your Custom Style</option>'; // Reset
+                Object.keys(archetypes).forEach(key => {
+                    archetypeSelect.innerHTML += `<option value="${key}">${archetypes[key].name}</option>`;
+                });
+                
+                document.querySelectorAll('#manner-contents input[type=range]').forEach(slider => { slider.addEventListener('input', () => { archetypeSelect.value = 'custom'; updateMannerLab(); }); });
+                archetypeSelect.addEventListener('change', (e) => {
+                    const archetypeKey = e.target.value;
+                    if (archetypeKey !== 'custom') {
+                        const settings = archetypes[archetypeKey].settings;
+                        Object.keys(settings).forEach(key => {
+                            const slider = document.getElementById(`${key}-lab`);
+                            if(slider) slider.value = settings[key];
+                        });
+                    }
+                    updateMannerLab();
+                });
+
+                const ctx = document.getElementById('manner-chart-lab').getContext('2d');
+                mannerChart = new Chart(ctx, { type: 'radar', data: { labels: [], datasets: [{ label: 'Your Style', data: [], backgroundColor: 'rgba(62, 146, 204, 0.2)', borderColor: 'rgba(62, 146, 204, 1)', pointBackgroundColor: 'rgba(62, 146, 204, 1)', pointBorderColor: '#fff' }] }, options: { scales: { r: { angleLines: { color: 'rgba(0, 0, 0, 0.1)' }, grid: { color: 'rgba(0, 0, 0, 0.1)' }, pointLabels: { color: '#0A2463', font: { family: "'Inter', sans-serif" } }, ticks: { display: false, stepSize: 1 }, suggestedMin: 0, suggestedMax: 5 } }, plugins: { legend: { display: false } } } });
+                updateMannerLab();
+            }
+            
+            function updateMannerLab() {
+                if (!mannerChart) return;
+                let chartData = [], chartLabels = [];
+                const archetypeSelect = document.getElementById('archetype-select');
+                if (!archetypeSelect) return;
+                const archetypeKey = archetypeSelect.value;
+                const archetypeDescEl = document.getElementById('archetype-description');
+
+                if (archetypeKey !== 'custom') {
+                    archetypeDescEl.textContent = archetypes[archetypeKey].desc;
+                } else {
+                    archetypeDescEl.textContent = "This is your custom style profile. Adjust the sliders to see how your manner changes.";
+                }
+                
+                Object.keys(mannerData).forEach(key => {
+                    const slider = document.getElementById(`${key}-lab`);
+                    if (!slider) return;
+                    const value = parseInt(slider.value, 10);
+                    const item = mannerData[key];
+                    const detail = item.details[value - 1];
+                    document.getElementById(`${key}-value-lab`).textContent = item.levels[value - 1];
+                    document.getElementById(`${key}-use-lab`).textContent = detail.u;
+                    document.getElementById(`${key}-char-lab`).textContent = detail.c;
+                    document.getElementById(`${key}-ex-lab`).textContent = detail.e;
+                    chartData.push(value);
+                    chartLabels.push(item.label);
+                });
+
+                mannerChart.data.labels = chartLabels;
+                mannerChart.data.datasets[0].data = chartData;
+                mannerChart.update();
+            }
+
+            function init() {
+                showPage(window.location.hash);
+                // MODIFICATION: No longer auto-generates motions on load
+                if (document.getElementById('manner-lab')) {
+                    setupMannerLab();
+                }
+            }
+            init();
+        });
+    </script>
+</body>
+</html>
